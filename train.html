@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Training Dashboard - PMK Monitor</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b3d 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(211, 47, 47, 0.15), rgba(211, 47, 47, 0.05));
+            border-radius: 16px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+        }
+
+        .header h1 {
+            color: #ff6b6b;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: #a0a0b8;
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 16px 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ff6b6b;
+        }
+
+        .stat-card .stat-label {
+            font-size: 11px;
+            color: #8888aa;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.06);
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            margin-bottom: 16px;
+        }
+
+        .card h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ff8a8a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card h3::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background: #ff6b6b;
+            border-radius: 2px;
+        }
+
+        .class-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .class-table th {
+            text-align: left;
+            color: #8888aa;
+            font-weight: 600;
+            padding: 6px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .class-table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: #c0c0d0;
+        }
+
+        .class-table .organ-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .badge-liur { background: rgba(255, 107, 107, 0.2); color: #ff8a8a; }
+        .badge-gusi { background: rgba(107, 203, 255, 0.2); color: #8ad4ff; }
+        .badge-kaki { background: rgba(107, 255, 162, 0.2); color: #8affc2; }
+        .badge-lidah { background: rgba(255, 207, 107, 0.2); color: #ffcf6b; }
+
+        button#trainBtn {
+            background: linear-gradient(135deg, #d32f2f, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(211, 47, 47, 0.3);
+        }
+
+        button#trainBtn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(211, 47, 47, 0.4);
+        }
+
+        button#trainBtn:disabled {
+            background: linear-gradient(135deg, #444, #555);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .progress-section {
+            margin: 16px 0;
+            display: none;
+        }
+
+        .progress-section.active { display: block; }
+
+        .progress-bar-container {
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #d32f2f, #ff6b6b, #ffab91);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #8888aa;
+        }
+
+        .epoch-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .epoch-stat {
+            background: rgba(255,255,255,0.04);
+            border-radius: 8px;
+            padding: 10px 12px;
+            text-align: center;
+        }
+
+        .epoch-stat .value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ff6b6b;
+        }
+
+        .epoch-stat .label {
+            font-size: 10px;
+            color: #8888aa;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .log-box {
+            background: #0a0a1a;
+            color: #00ff88;
+            padding: 16px;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 11px;
+            height: 280px;
+            overflow-y: auto;
+            margin-top: 16px;
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            line-height: 1.6;
+        }
+
+        .log-box .log-error { color: #ff6b6b; }
+        .log-box .log-success { color: #00ff88; }
+        .log-box .log-info { color: #6bc5ff; }
+        .log-box .log-warning { color: #ffcf6b; }
+
+        .log-box::-webkit-scrollbar { width: 4px; }
+        .log-box::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 136, 0.2);
+            border-radius: 2px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 16px;
+            color: #8888aa;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #ff6b6b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Kembali ke Beranda</a>
+
+        <div class="header">
+            <h1>🧬 Dashboard Pelatihan AI</h1>
+            <p>Transfer Learning dengan MobileNet v2 → Dense Neural Network.<br>
+            Dataset dari <code style="color: #ff8a8a;">pmk_labelled/</code> dengan 13 kelas (4 organ × level keparahan).</p>
+        </div>
+
+        <!-- Dataset Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalImages">-</div>
+                <div class="stat-label">Total Gambar</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalClasses">-</div>
+                <div class="stat-label">Jumlah Kelas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalOrgans">4</div>
+                <div class="stat-label">Organ</div>
+            </div>
+        </div>
+
+        <!-- Class Distribution -->
+        <div class="card" id="classDistCard" style="display:none;">
+            <h3>Distribusi Kelas Dataset</h3>
+            <table class="class-table" id="classTable">
+                <thead>
+                    <tr>
+                        <th>Organ</th>
+                        <th>Kelas</th>
+                        <th>Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody id="classTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Train Button -->
+        <button id="trainBtn" onclick="startTraining()">🚀 Mulai Pelatihan Model</button>
+
+        <!-- Progress -->
+        <div class="progress-section" id="progressSection">
+            <div class="progress-label">
+                <span id="progressPhase">Memuat...</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="epoch-stats" id="epochStats" style="display:none;">
+                <div class="epoch-stat">
+                    <div class="value" id="epochLoss">-</div>
+                    <div class="label">Loss</div>
+                </div>
+                <div class="epoch-stat">
+                    <div class="value" id="epochAcc">-</div>
+                    <div class="label">Accuracy</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs -->
+        <div class="log-box" id="logs">
+            <div class="log-info">&gt; Sistem siap. Klik tombol di atas untuk memulai pelatihan.</div>
+        </div>
+    </div>
+
+    <script>
+        const CLASSES = [
+            'air_liur_1', 'air_liur_2', 'air_liur_3', 'air_liur_4',
+            'gusi_1', 'gusi_2', 'gusi_3',
+            'kaki_1', 'kaki_2', 'kaki_3',
+            'lidah_1', 'lidah_2', 'lidah_3'
+        ];
+
+        const TRAINING_CONFIG = {
+            epochs: 30,
+            batchSize: 8,
+            learningRate: 0.0005,
+            validationSplit: 0.15,
+            hiddenUnits1: 256,
+            hiddenUnits2: 128,
+            dropout: 0.3
+        };
+
+        function log(msg, type = '') {
+            const logs = document.getElementById('logs');
+            if (logs) {
+                const cls = type ? ` class="log-${type}"` : '';
+                logs.innerHTML += `<div${cls}>&gt; ${msg}</div>`;
+                logs.scrollTop = logs.scrollHeight;
+            }
+        }
+
+        function updateProgress(phase, percent) {
+            document.getElementById('progressPhase').textContent = phase;
+            document.getElementById('progressPercent').textContent = Math.round(percent) + '%';
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        // Load and display dataset info on page load
+        async function loadDatasetInfo() {
+            try {
+                const response = await fetch('/dataset_list.json');
+                const datasetList = await response.json();
+
+                document.getElementById('totalImages').textContent = datasetList.length;
+
+                // Count classes
+                const classCounts = {};
+                datasetList.forEach(item => {
+                    classCounts[item.label] = (classCounts[item.label] || 0) + 1;
+                });
+
+                const uniqueClasses = Object.keys(classCounts);
+                document.getElementById('totalClasses').textContent = uniqueClasses.length;
+
+                // Build class table
+                const tbody = document.getElementById('classTableBody');
+                const organOrder = ['air_liur', 'gusi', 'kaki', 'lidah'];
+                const organNames = { 'air_liur': 'Air Liur', 'gusi': 'Gusi', 'kaki': 'Kaki', 'lidah': 'Lidah' };
+                const badgeClasses = { 'air_liur': 'badge-liur', 'gusi': 'badge-gusi', 'kaki': 'badge-kaki', 'lidah': 'badge-lidah' };
+
+                let tableHtml = '';
+                for (const organ of organOrder) {
+                    const organClasses = uniqueClasses.filter(c => c.startsWith(organ)).sort();
+                    for (const cls of organClasses) {
+                        const level = cls.split('_').pop();
+                        tableHtml += `<tr>
+                            <td><span class="organ-badge ${badgeClasses[organ]}">${organNames[organ]}</span></td>
+                            <td>${cls} (Level ${level})</td>
+                            <td>${classCounts[cls]}</td>
+                        </tr>`;
+                    }
+                }
+                tbody.innerHTML = tableHtml;
+                document.getElementById('classDistCard').style.display = 'block';
+
+            } catch (err) {
+                log('Gagal memuat info dataset: ' + err.message, 'error');
+            }
+        }
+
+        loadDatasetInfo();
+
+        async function startTraining() {
+            const trainBtn = document.getElementById('trainBtn');
+            const progressSection = document.getElementById('progressSection');
+            const epochStats = document.getElementById('epochStats');
+
+            trainBtn.disabled = true;
+            trainBtn.textContent = '⏳ Sedang Melatih...';
+            progressSection.classList.add('active');
+
+            try {
+                // Phase 1: Setup TensorFlow backend
+                log('Mengatur backend TFJS...', 'info');
+                await tf.setBackend('cpu');
+                await tf.ready();
+                log('Backend saat ini: ' + tf.getBackend(), 'info');
+
+                // Phase 2: Load MobileNet
+                updateProgress('Memuat MobileNet v2...', 5);
+                log('Memuat MobileNet v2 sebagai feature extractor...', 'info');
+                const mobilenetModel = await mobilenet.load({ version: 2, alpha: 1.0 });
+                log('MobileNet v2 berhasil dimuat!', 'success');
+
+                // Phase 3: Load dataset list
+                updateProgress('Memuat dataset...', 10);
+                log('Mengambil daftar dataset...', 'info');
+                const response = await fetch('/dataset_list.json');
+                const datasetList = await response.json();
+                log(`Dataset dimuat: ${datasetList.length} gambar, ${CLASSES.length} kelas.`, 'success');
+
+                // Validate classes in dataset
+                const datasetClasses = [...new Set(datasetList.map(d => d.label))];
+                const missingClasses = CLASSES.filter(c => !datasetClasses.includes(c));
+                if (missingClasses.length > 0) {
+                    log(`PERINGATAN: Kelas tanpa data: ${missingClasses.join(', ')}`, 'warning');
+                }
+
+                // Print distribution
+                const dist = {};
+                datasetList.forEach(d => dist[d.label] = (dist[d.label] || 0) + 1);
+                Object.entries(dist).forEach(([label, count]) => {
+                    log(`  ${label}: ${count} gambar`, 'info');
+                });
+
+                // Phase 4: Extract features
+                updateProgress('Mengekstrak fitur...', 15);
+                log('Memulai ekstraksi fitur MobileNet dari gambar...', 'info');
+
+                const xs = [];
+                const ys = [];
+                let loadErrors = 0;
+
+                for (let i = 0; i < datasetList.length; i++) {
+                    const item = datasetList[i];
+                    const progress = 15 + (65 * (i / datasetList.length));
+                    updateProgress(`Ekstraksi fitur: ${i + 1}/${datasetList.length}`, progress);
+
+                    try {
+                        const img = new Image();
+                        img.crossOrigin = 'anonymous';
+                        img.src = item.url;
+
+                        await new Promise((resolve, reject) => {
+                            img.onload = () => {
+                                try {
+                                    const features = mobilenetModel.infer(img, true);
+                                    xs.push(features);
+
+                                    const labelIndex = CLASSES.indexOf(item.label);
+                                    if (labelIndex === -1) {
+                                        log(`Label tidak dikenali: ${item.label}`, 'warning');
+                                        reject(new Error('Unknown label'));
+                                        return;
+                                    }
+                                    ys.push(labelIndex);
+                                    resolve();
+                                } catch (inferErr) {
+                                    reject(inferErr);
+                                }
+                            };
+                            img.onerror = () => reject(new Error(`Gagal memuat: ${item.url}`));
+
+                            // Timeout after 15 seconds
+                            setTimeout(() => reject(new Error(`Timeout memuat: ${item.url}`)), 15000);
+                        });
+
+                        if ((i + 1) % 5 === 0 || i === datasetList.length - 1) {
+                            log(`Ekstraksi fitur: ${i + 1}/${datasetList.length} selesai`);
+                        }
+                    } catch (imgErr) {
+                        loadErrors++;
+                        log(`SKIP gambar ${i + 1}: ${imgErr.message}`, 'warning');
+                    }
+                }
+
+                log(`Ekstraksi fitur selesai! ${xs.length} gambar berhasil, ${loadErrors} gagal.`, 'success');
+
+                if (xs.length < 10) {
+                    throw new Error(`Terlalu sedikit gambar berhasil dimuat (${xs.length}). Periksa path dataset dan coba lagi.`);
+                }
+
+                // Phase 5: Build training tensors
+                updateProgress('Menyiapkan tensor...', 82);
+                log('Membuat training tensors...', 'info');
+
+                const xDataset = tf.concat(xs);
+                const yDataset = tf.oneHot(tf.tensor1d(ys, 'int32'), CLASSES.length);
+
+                log(`Input shape: [${xDataset.shape}]`, 'info');
+                log(`Output shape: [${yDataset.shape}]`, 'info');
+
+                // Phase 6: Build model architecture
+                updateProgress('Membuat arsitektur model...', 84);
+                log('Membuat arsitektur Dense Neural Network...', 'info');
+                log(`  Hidden layer 1: ${TRAINING_CONFIG.hiddenUnits1} units (ReLU)`, 'info');
+                log(`  Dropout: ${TRAINING_CONFIG.dropout}`, 'info');
+                log(`  Hidden layer 2: ${TRAINING_CONFIG.hiddenUnits2} units (ReLU)`, 'info');
+                log(`  Dropout: ${TRAINING_CONFIG.dropout}`, 'info');
+                log(`  Output layer: ${CLASSES.length} units (Softmax)`, 'info');
+
+                const model = tf.sequential({
+                    layers: [
+                        tf.layers.dense({
+                            inputShape: xDataset.shape.slice(1),
+                            units: TRAINING_CONFIG.hiddenUnits1,
+                            activation: 'relu',
+                            kernelRegularizer: tf.regularizers.l2({ l2: 0.001 })
+                        }),
+                        tf.layers.dropout({ rate: TRAINING_CONFIG.dropout }),
+                        tf.layers.dense({
+                            units: TRAINING_CONFIG.hiddenUnits2,
+                            activation: 'relu',
+                            kernelRegularizer: tf.regularizers.l2({ l2: 0.001 })
+                        }),
+                        tf.layers.dropout({ rate: TRAINING_CONFIG.dropout }),
+                        tf.layers.dense({
+                            units: CLASSES.length,
+                            activation: 'softmax'
+                        })
+                    ]
+                });
+
+                model.compile({
+                    optimizer: tf.train.adam(TRAINING_CONFIG.learningRate),
+                    loss: 'categoricalCrossentropy',
+                    metrics: ['accuracy']
+                });
+
+                model.summary();
+                log(`Total parameters: ${model.countParams().toLocaleString()}`, 'info');
+
+                // Phase 7: Train the model
+                updateProgress('Training model...', 86);
+                epochStats.style.display = 'grid';
+                log(`Memulai training (Epochs: ${TRAINING_CONFIG.epochs}, Batch: ${TRAINING_CONFIG.batchSize}, LR: ${TRAINING_CONFIG.learningRate})...`, 'info');
+
+                let bestAcc = 0;
+
+                await model.fit(xDataset, yDataset, {
+                    epochs: TRAINING_CONFIG.epochs,
+                    batchSize: TRAINING_CONFIG.batchSize,
+                    validationSplit: TRAINING_CONFIG.validationSplit,
+                    shuffle: true,
+                    callbacks: {
+                        onEpochEnd: (epoch, epochLogs) => {
+                            const trainLoss = epochLogs.loss.toFixed(4);
+                            const trainAcc = epochLogs.acc.toFixed(4);
+                            const valLoss = epochLogs.val_loss ? epochLogs.val_loss.toFixed(4) : '-';
+                            const valAcc = epochLogs.val_acc ? epochLogs.val_acc.toFixed(4) : '-';
+
+                            const progress = 86 + (12 * ((epoch + 1) / TRAINING_CONFIG.epochs));
+                            updateProgress(`Epoch ${epoch + 1}/${TRAINING_CONFIG.epochs}`, progress);
+
+                            document.getElementById('epochLoss').textContent = trainLoss;
+                            document.getElementById('epochAcc').textContent = (parseFloat(trainAcc) * 100).toFixed(1) + '%';
+
+                            if (parseFloat(trainAcc) > bestAcc) bestAcc = parseFloat(trainAcc);
+
+                            log(`Epoch ${epoch + 1}/${TRAINING_CONFIG.epochs}: loss=${trainLoss}, acc=${trainAcc}, val_loss=${valLoss}, val_acc=${valAcc}`);
+                        }
+                    }
+                });
+
+                log(`Training selesai! Akurasi terbaik: ${(bestAcc * 100).toFixed(1)}%`, 'success');
+
+                // Phase 8: Save model
+                updateProgress('Menyimpan model...', 98);
+                log('Menyimpan model ke server (public/model/)...', 'info');
+                await model.save(window.location.origin + '/api/save-model');
+
+                updateProgress('Selesai!', 100);
+                log('═══════════════════════════════════════', 'success');
+                log('✅ MODEL BERHASIL DILATIH DAN DISIMPAN!', 'success');
+                log(`📊 Total gambar: ${xs.length}`, 'success');
+                log(`📁 Jumlah kelas: ${CLASSES.length}`, 'success');
+                log(`🎯 Akurasi terbaik: ${(bestAcc * 100).toFixed(1)}%`, 'success');
+                log(`💾 Model disimpan di: public/model/`, 'success');
+                log('═══════════════════════════════════════', 'success');
+
+                trainBtn.textContent = '✅ Pelatihan Selesai!';
+
+                // Cleanup tensors
+                xDataset.dispose();
+                yDataset.dispose();
+                xs.forEach(t => t.dispose());
+
+            } catch (err) {
+                log('ERROR: ' + err.message, 'error');
+                console.error(err);
+                trainBtn.textContent = '❌ Gagal - Klik untuk Coba Lagi';
+                trainBtn.disabled = false;
+                trainBtn.onclick = () => { location.reload(); };
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- fragment_result.xml - Hasil diagnosa (lingkaran persentase + status suspek) -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="16dp">
+
+        <ImageButton
+            android:id="@+id/btn_back_result"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_circle_gray"
+            android:src="@drawable/ic_arrow_left"
+            android:scaleType="centerInside"
+            android:contentDescription="Kembali"
+            android:padding="8dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:text="Persentase"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_dark" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:paddingHorizontal="20dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/light_pink"
+            app:cardCornerRadius="40dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="25dp"
+                android:gravity="center_horizontal"
+                android:minHeight="580dp">
+
+                <!-- Description -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Berikut persentase harapan hidup sapi Anda dan temukan solusi yang tepat!"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_dark"
+                    android:lineSpacingMultiplier="1.4" />
+
+                <!-- Result Circle -->
+                <FrameLayout
+                    android:layout_width="260dp"
+                    android:layout_height="260dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:background="@drawable/result_circle_bg">
+
+                    <TextView
+                        android:id="@+id/tv_survival_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="95%"
+                        android:textSize="54sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_dark"
+                        android:letterSpacing="-0.02" />
+                </FrameLayout>
+
+                <!-- Curve Label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Harapan Hidup Sapi (Kurva Skala 50% - 95%)"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_gray"
+                    android:layout_marginBottom="15dp" />
+
+                <!-- Suspect Score -->
+                <TextView
+                    android:id="@+id/tv_suspect_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tingkat Indikasi Suspek PMK: 0%"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_dark"
+                    android:layout_marginBottom="5dp" />
+
+                <!-- Status -->
+                <TextView
+                    android:id="@+id/tv_suspect_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status: Suspek Tingkat Rendah (Aman)"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#2e7d32"
+                    android:textAlignment="center"
+                    android:lineSpacingMultiplier="1.3" />
+
+                <!-- Spacer -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <!-- Solusi Button -->
+                <Button
+                    android:id="@+id/btn_solusi"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="20dp"
+                    android:text="SOLUSI"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="@color/primary_red"
+                    app:cornerRadius="18dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
+</LinearLayout>

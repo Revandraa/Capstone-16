@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- nav_graph.xml - Navigation graph untuk semua fragment -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <!-- Home -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.pmk.monitor.ui.fragments.HomeFragment"
+        android:label="Beranda"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_quiz"
+            app:destination="@id/quizFragment" />
+        <action
+            android:id="@+id/action_home_to_login"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <!-- Quiz -->
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="com.pmk.monitor.ui.fragments.QuizFragment"
+        android:label="Pertanyaan"
+        tools:layout="@layout/fragment_quiz">
+        <action
+            android:id="@+id/action_quiz_to_result"
+            app:destination="@id/resultFragment" />
+        <action
+            android:id="@+id/action_quiz_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Result -->
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.pmk.monitor.ui.fragments.ResultFragment"
+        android:label="Persentase"
+        tools:layout="@layout/fragment_result">
+        <action
+            android:id="@+id/action_result_to_solution"
+            app:destination="@id/solutionFragment" />
+        <action
+            android:id="@+id/action_result_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Solution -->
+    <fragment
+        android:id="@+id/solutionFragment"
+        android:name="com.pmk.monitor.ui.fragments.SolutionFragment"
+        android:label="Solusi"
+        tools:layout="@layout/fragment_solution">
+        <action
+            android:id="@+id/action_solution_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- History -->
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.pmk.monitor.ui.fragments.HistoryFragment"
+        android:label="Histori"
+        tools:layout="@layout/fragment_history" />
+
+    <!-- Login -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.pmk.monitor.ui.fragments.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_login_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Register -->
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.pmk.monitor.ui.fragments.RegisterFragment"
+        android:label="Daftar"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_register_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Profile -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.pmk.monitor.ui.fragments.ProfileFragment"
+        android:label="Profil"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profile_to_login"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+</navigation>

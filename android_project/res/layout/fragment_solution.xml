@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- fragment_solution.xml - Halaman solusi PMK -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="16dp">
+
+        <ImageButton
+            android:id="@+id/btn_back_solution"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_circle_gray"
+            android:src="@drawable/ic_arrow_left"
+            android:scaleType="centerInside"
+            android:contentDescription="Kembali"
+            android:padding="8dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:text="Solusi"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_dark" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:paddingHorizontal="20dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/light_pink"
+            app:cardCornerRadius="40dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="35dp"
+                android:minHeight="580dp">
+
+                <!-- Solution Items -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1. Jagalah kebersihan kandang sapi Anda. Bersihkan peralatan yang terkontaminasi PMK atau peralatan yang sesudah digunakan untuk sapi yang terkena PMK."
+                    android:textSize="14sp"
+                    android:textColor="@color/text_dark"
+                    android:lineSpacingMultiplier="1.6"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="2. Berikan sapi Anda vitamin dan obat herbal atau jamu yang terbuat dari eco enzim atau asam sitrat dengan pengaplikasiannya disemprot pada bagian luka luar sapi."
+                    android:textSize="14sp"
+                    android:textColor="@color/text_dark"
+                    android:lineSpacingMultiplier="1.6"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="3. Karantina sapi yang terkena PMK agar sapi lain tidak tertular."
+                    android:textSize="14sp"
+                    android:textColor="@color/text_dark"
+                    android:lineSpacingMultiplier="1.6"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="4. Cuci dan bersihkan luka."
+                    android:textSize="14sp"
+                    android:textColor="@color/text_dark"
+                    android:lineSpacingMultiplier="1.6"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="5. Apabila keadaan sapi semakin memburuk, hubungilah dokter hewan atau petugas dinas peternakan terdekat."
+                    android:textSize="14sp"
+                    android:textColor="@color/text_dark"
+                    android:lineSpacingMultiplier="1.6"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Spacer -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <!-- Back to Home Button -->
+                <Button
+                    android:id="@+id/btn_back_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="20dp"
+                    android:text="KEMBALI"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="@color/primary_red"
+                    app:cornerRadius="18dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- fragment_register.xml - Halaman registrasi akun -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="40dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daftar Akun"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_dark" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Lengkapi data diri Anda"
+            android:textSize="14sp"
+            android:textColor="@color/text_gray" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:paddingHorizontal="20dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/light_pink"
+            app:cardCornerRadius="40dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="35dp"
+                android:gravity="center_horizontal">
+
+                <!-- Full Name -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="25dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="NAMA LENGKAP"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_gray"
+                            android:letterSpacing="0.1"
+                            android:layout_marginBottom="5dp" />
+
+                        <EditText
+                            android:id="@+id/et_reg_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_edittext"
+                            android:paddingHorizontal="16dp"
+                            android:textSize="16sp"
+                            android:inputType="textPersonName"
+                            android:hint="Masukkan nama lengkap" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Username -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="25dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="USERNAME"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_gray"
+                            android:letterSpacing="0.1"
+                            android:layout_marginBottom="5dp" />
+
+                        <EditText
+                            android:id="@+id/et_reg_username"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_edittext"
+                            android:paddingHorizontal="16dp"
+                            android:textSize="16sp"
+                            android:inputType="text"
+                            android:hint="Masukkan username" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Password -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="25dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PASSWORD"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_gray"
+                            android:letterSpacing="0.1"
+                            android:layout_marginBottom="5dp" />
+
+                        <EditText
+                            android:id="@+id/et_reg_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_edittext"
+                            android:paddingHorizontal="16dp"
+                            android:textSize="16sp"
+                            android:inputType="textPassword"
+                            android:hint="Masukkan password" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Register Button -->
+                <Button
+                    android:id="@+id/btn_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="DAFTAR"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="@color/primary_red"
+                    app:cornerRadius="18dp" />
+
+                <!-- Login Link -->
+                <TextView
+                    android:id="@+id/tv_go_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_gray" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
+</LinearLayout>

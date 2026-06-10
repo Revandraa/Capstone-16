@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- colors.xml - Warna sesuai design system web (styles.css :root variables) -->
+<resources>
+    <color name="primary_red">#D00000</color>
+    <color name="primary_red_hover">#A00000</color>
+    <color name="light_pink">#FEEEEE</color>
+    <color name="white">#FFFFFF</color>
+    <color name="text_dark">#1A1A1A</color>
+    <color name="text_gray">#636E72</color>
+    <color name="bg_gray">#F0F2F5</color>
+    <color name="nav_active">#FFD7D7</color>
+
+    <!-- Status Colors -->
+    <color name="status_safe">#2E7D32</color>
+    <color name="status_medium">#EF6C00</color>
+    <color name="status_high">#D84315</color>
+    <color name="status_danger">#C62828</color>
+
+    <!-- Badge Colors -->
+    <color name="badge_hybrid_bg">#E8F5E9</color>
+    <color name="badge_hybrid_text">#2E7D32</color>
+    <color name="badge_hybrid_border">#C8E6C9</color>
+</resources>

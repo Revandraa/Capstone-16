@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- strings.xml - String resources -->
+<resources>
+    <string name="app_name">PMK Monitor</string>
+    <string name="nav_home">Beranda</string>
+    <string name="nav_history">Histori</string>
+    <string name="nav_profile">Profil</string>
+</resources>

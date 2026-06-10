@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- bg_dashed_border.xml - Dashed border for AI upload zone -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#FFF9F9" />
+    <stroke android:width="2dp" android:color="#FFB3B3" android:dashWidth="8dp" android:dashGap="4dp" />
+    <corners android:radius="20dp" />
+</shape>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PMK Monitor</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Auth Screens -->
+        <div id="screen-login" class="screen">
+            <header>
+                <h1>Login</h1>
+                <p>Masuk untuk menyimpan riwayat diagnosa</p>
+            </header>
+            <main>
+                <div class="card">
+                    <div class="profile-card" style="width: 100%;">
+                        <h4>Username</h4>
+                        <input type="text" id="login-username"
+                            style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd; margin-top: 5px;">
+                    </div>
+                    <div class="profile-card" style="width: 100%;">
+                        <h4>Password</h4>
+                        <input type="password" id="login-password"
+                            style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd; margin-top: 5px;">
+                    </div>
+                    <button class="btn-mulai" onclick="handleLogin()"
+                        style="width: 100%; font-size: 18px;">LOGIN</button>
+                    <p style="margin-top: 20px; font-size: 14px; color: var(--text-gray);">Belum punya akun? <span
+                            onclick="navigateTo('screen-register')"
+                            style="color: var(--primary-red); cursor: pointer; font-weight: 700;">Daftar</span></p>
+                </div>
+            </main>
+        </div>
+
+        <div id="screen-register" class="screen">
+            <header>
+                <h1>Daftar Akun</h1>
+                <p>Lengkapi data diri Anda</p>
+            </header>
+            <main>
+                <div class="card">
+                    <div class="profile-card" style="width: 100%;">
+                        <h4>Nama Lengkap</h4>
+                        <input type="text" id="reg-name"
+                            style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd; margin-top: 5px;">
+                    </div>
+                    <div class="profile-card" style="width: 100%;">
+                        <h4>Username</h4>
+                        <input type="text" id="reg-username"
+                            style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd; margin-top: 5px;">
+                    </div>
+                    <div class="profile-card" style="width: 100%;">
+                        <h4>Password</h4>
+                        <input type="password" id="reg-password"
+                            style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd; margin-top: 5px;">
+                    </div>
+                    <button class="btn-mulai" onclick="handleRegister()"
+                        style="width: 100%; font-size: 18px;">DAFTAR</button>
+                    <p style="margin-top: 20px; font-size: 14px; color: var(--text-gray);">Sudah punya akun? <span
+                            onclick="navigateTo('screen-login')"
+                            style="color: var(--primary-red); cursor: pointer; font-weight: 700;">Login</span></p>
+                </div>
+            </main>
+        </div>
+
+        <!-- Screens will be managed here -->
+        <div id="screen-home" class="screen active">
+            <header style="padding: 24px 24px 16px;">
+                <div class="header-top">
+                    <div class="brand-wrapper">
+                        <img src="pmk_monitor_logo.png" alt="PMK Monitor" class="mini-logo">
+                        <span class="brand-name">PMK Monitor</span>
+                    </div>
+                    <button class="logout-btn-header" onclick="handleLogout()"><i data-lucide="log-out"></i></button>
+                </div>
+                <div class="header-welcome">
+                    <h2>Halo, Peternak! 👋</h2>
+                    <p>Sistem Pemantauan Harapan Hidup & Indikasi Suspek PMK Sapi berbasis Hybrid AI + AHP</p>
+                </div>
+            </header>
+            <main>
+                <div class="card" style="padding: 25px 20px;">
+                    <img src="pmk_monitor_logo.png" alt="PMK Monitor Logo" class="home-illustration" style="max-height: 160px; border-radius: 32px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15); margin-bottom: 20px;">
+                    <p class="home-text" style="margin-bottom: 25px; font-size: 15px;">Dapatkan persentase tingkat indikasi suspek PMK secara akurat melalui kuesioner cerdas terpadu (opsional pilih ganda atau unggah foto AI per gejala).</p>
+
+                    <div class="menu-grid">
+                        <div class="menu-card ai-card" onclick="navigateTo('screen-q')" style="border-color: #ffe6e6; background: linear-gradient(145deg, #ffffff, #fff5f5);">
+                            <div class="menu-icon-wrapper ai-icon">
+                                <i data-lucide="cpu"></i>
+                            </div>
+                            <h3>Mulai Deteksi PMK</h3>
+                            <p>Kuesioner Hybrid AI MobileNet & Manual AHP dalam satu alur praktis</p>
+                            <span class="badge-ai">Hybrid System</span>
+                        </div>
+
+                        <div class="menu-card manual-card" onclick="navigateTo('screen-history')">
+                            <div class="menu-icon-wrapper manual-icon" style="background: #f0f2f5; color: var(--text-gray);">
+                                <i data-lucide="calendar"></i>
+                            </div>
+                            <h3>Riwayat Diagnosa</h3>
+                            <p>Lihat kembali hasil diagnosa dan persentase tingkat suspek PMK sapi Anda</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <div id="screen-q" class="screen">
+            <header style="display: flex; align-items: center; gap: 16px; padding: 24px 24px 16px;">
+                <button class="logout-btn-header" onclick="navigateTo('screen-home')" title="Batal & Kembali">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <div style="flex: 1; text-align: left;">
+                    <h1 style="font-size: 24px; font-family: 'Lora', serif; font-weight: 700;">PMK Monitor</h1>
+                </div>
+            </header>
+            <main id="question-container">
+                <!-- Question content injected here -->
+            </main>
+        </div>
+
+        <!-- History Screen -->
+        <div id="screen-history" class="screen">
+            <header style="padding: 28px 24px 16px;">
+                <h1>Histori</h1>
+                <p>Riwayat diagnosa kesehatan sapi Anda</p>
+            </header>
+            <main>
+                <div class="card" id="history-container">
+                    <!-- History items injected here -->
+                    <div class="history-list">
+                        <p style="color: var(--text-gray);">Belum ada riwayat diagnosa.</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Profile Screen -->
+        <div id="screen-profile" class="screen">
+            <header style="padding: 28px 24px 16px;">
+                <h1>Profil</h1>
+                <p>Informasi akun dan pengaturan</p>
+            </header>
+            <main>
+                <div class="card">
+                    <div class="profile-avatar">
+                        <i data-lucide="user"></i>
+                    </div>
+                    <div class="profile-card">
+                        <h4>Nama Lengkap</h4>
+                        <p>Revandra Athaya</p>
+                    </div>
+                    <div class="profile-card">
+                        <h4>Peran</h4>
+                        <p>Pemilik Ternak (Farmer)</p>
+                    </div>
+                    <div class="profile-card">
+                        <h4>Email</h4>
+                        <p>revan@example.com</p>
+                    </div>
+                    <button class="btn-mulai" onclick="navigateTo('screen-home')"
+                        style="background: var(--text-gray); font-size: 16px; padding: 12px 40px; margin-top: auto;">LOGOUT</button>
+                </div>
+            </main>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div id="nav-home" class="nav-item active" onclick="navigateTo('screen-home')">
+                <i data-lucide="home"></i>
+                <span>Beranda</span>
+            </div>
+            <div id="nav-history" class="nav-item" onclick="navigateTo('screen-history')">
+                <i data-lucide="calendar"></i>
+                <span>Histori</span>
+            </div>
+            <div id="nav-profile" class="nav-item" onclick="navigateTo('screen-profile')">
+                <i data-lucide="user"></i>
+                <span>Profil</span>
+            </div>
+        </nav>
+    </div>
+
+    <script src="scripts.js" type="module"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
